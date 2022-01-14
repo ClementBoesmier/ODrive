@@ -3,37 +3,27 @@
 #include "ODriveArduino.h"
 
 // Print with stream operator
-template<class T> inline Print& operator <<(Print &obj,     T arg) { obj.print(arg);    return obj; }
-template<>        inline Print& operator <<(Print &obj, float arg) { obj.print(arg, 4); return obj; }
+template<class T> inline Print& operator <<(Print& obj, T arg) { obj.print(arg);    return obj; }
+template<>        inline Print& operator <<(Print& obj, float arg) { obj.print(arg, 4); return obj; }
 
 ODriveArduino::ODriveArduino(Stream& serial)
-    : serial_(serial) {}
-
-void ODriveArduino::SetPosition(int motor_number, float position) {
-    SetPosition(motor_number, position, 0.0f, 0.0f);
+    : serial_(serial) {
 }
 
-void ODriveArduino::SetPosition(int motor_number, float position, float velocity_feedforward) {
-    SetPosition(motor_number, position, velocity_feedforward, 0.0f);
+void ODriveArduino::setPosition(int motor_number, float position, float velocity_feedforward, float current_feedforward) {
+    serial_ << "p " << motor_number << " " << position << " " << velocity_feedforward << " " << current_feedforward << "\n";
 }
 
-void ODriveArduino::SetPosition(int motor_number, float position, float velocity_feedforward, float current_feedforward) {
-    serial_ << "p " << motor_number  << " " << position << " " << velocity_feedforward << " " << current_feedforward << "\n";
+
+void ODriveArduino::setVelocity(int motor_number, float velocity, float current_feedforward) {
+    serial_ << "v " << motor_number << " " << velocity << " " << current_feedforward << "\n";
 }
 
-void ODriveArduino::SetVelocity(int motor_number, float velocity) {
-    SetVelocity(motor_number, velocity, 0.0f);
-}
-
-void ODriveArduino::SetVelocity(int motor_number, float velocity, float current_feedforward) {
-    serial_ << "v " << motor_number  << " " << velocity << " " << current_feedforward << "\n";
-}
-
-void ODriveArduino::SetCurrent(int motor_number, float current) {
+void ODriveArduino::setCurrent(int motor_number, float current) {
     serial_ << "c " << motor_number << " " << current << "\n";
 }
 
-void ODriveArduino::TrapezoidalMove(int motor_number, float position) {
+void ODriveArduino::trapezoidalMove(int motor_number, float position) {
     serial_ << "t " << motor_number << " " << position << "\n";
 }
 
@@ -41,12 +31,12 @@ float ODriveArduino::readFloat() {
     return readString().toFloat();
 }
 
-float ODriveArduino::GetVelocity(int motor_number) {
-	serial_<< "r axis" << motor_number << ".encoder.vel_estimate\n";
-	return ODriveArduino::readFloat();
+float ODriveArduino::getVelocity(int motor_number) {
+    serial_ << "r axis" << motor_number << ".encoder.vel_estimate\n";
+    return ODriveArduino::readFloat();
 }
 
-float ODriveArduino::GetPosition(int motor_number) {
+float ODriveArduino::getPosition(int motor_number) {
     serial_ << "r axis" << motor_number << ".encoder.pos_estimate\n";
     return ODriveArduino::readFloat();
 }
