@@ -6,6 +6,11 @@
 #include "ODriveEnums.h"
 
 class ODriveArduino {
+private:
+    String readString();
+
+    Stream& serial_;
+
 public:
     /**
      * @brief Construct a new ODriveArduino object
@@ -24,7 +29,7 @@ public:
      * @param[in] velocity_feedforward
      * @param[in] current_feedforward
      */
-    void setPosition(int motor_number, float position, float velocity_feedforward = 0, 0f, float current_feedforward = 0.0f);
+    void setPosition(int motor_number, float position, float velocity_feedforward = 0.0f, float current_feedforward = 0.0f);
 
     //TODO: comprendre comment marche current_feedforward
     /**
@@ -36,22 +41,42 @@ public:
      */
     void setVelocity(int motor_number, float velocity, float current_feedforward = 0.0f);
 
-
+    //TODO: comprendre comment marche la notion de current
+    /**
+     * @brief Set the Current object
+     *
+     * @param motor_number The motor to set the current of
+     * @param current
+     */
     void setCurrent(int motor_number, float current);
+
+    //TODO: comprendre comment marche la notion de trapezoidalMove
     void trapezoidalMove(int motor_number, float position);
-    // getters
+
+
+    /**
+     * @brief Get the Velocity of a motor
+     *
+     * @param[in] motor_number The motor to get the velocity of
+     * @return float The velocity of the motor
+     */
     float getVelocity(int motor_number);
+
+    /**
+     * @brief Get the Position of a motor
+     *
+     * @param[in] motor_number The motor to get the position of
+     * @return float The position of the motor
+     */
     float getPosition(int motor_number);
+
+
     // General params
     float readFloat();
     int32_t readInt();
 
     // State helper
     bool run_state(int axis, int requested_state, bool wait_for_idle, float timeout = 10.0f);
-private:
-    String readString();
-
-    Stream& serial_;
 };
 
 #endif //ODriveArduino_h
