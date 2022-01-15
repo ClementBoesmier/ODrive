@@ -3,8 +3,8 @@
 #include <SoftwareSerial.h>
 #include <ODriveArduino.h>
 // Printing with stream operator helper functions
-template<class T> inline Print& operator <<(Print &obj,     T arg) { obj.print(arg);    return obj; }
-template<>        inline Print& operator <<(Print &obj, float arg) { obj.print(arg, 4); return obj; }
+template<class T> inline Print& operator <<(Print& obj, T arg) { obj.print(arg);    return obj; }
+template<>        inline Print& operator <<(Print& obj, float arg) { obj.print(arg, 4); return obj; }
 
 
 ////////////////////////////////
@@ -44,7 +44,7 @@ void setup() {
 
   // Serial to PC
   Serial.begin(115200);
-  while (!Serial) ; // wait for Arduino Serial Monitor to open
+  while (!Serial); // wait for Arduino Serial Monitor to open
 
   Serial.println("ODriveArduino");
   Serial.println("Setting parameters...");
@@ -72,20 +72,20 @@ void loop() {
 
     // Run calibration sequence
     if (c == '0' || c == '1') {
-      int motornum = c-'0';
+      int motornum = c - '0';
       int requested_state;
 
       requested_state = AXIS_STATE_MOTOR_CALIBRATION;
       Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-      if(!odrive.run_state(motornum, requested_state, true)) return;
+      if (!odrive.runState(motornum, requested_state, true)) return;
 
       requested_state = AXIS_STATE_ENCODER_OFFSET_CALIBRATION;
       Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-      if(!odrive.run_state(motornum, requested_state, true, 25.0f)) return;
+      if (!odrive.runState(motornum, requested_state, true, 25.0f)) return;
 
       requested_state = AXIS_STATE_CLOSED_LOOP_CONTROL;
       Serial << "Axis" << c << ": Requesting state " << requested_state << '\n';
-      if(!odrive.run_state(motornum, requested_state, false /*don't wait*/)) return;
+      if (!odrive.runState(motornum, requested_state, false /*don't wait*/)) return;
     }
 
     // Sinusoidal test move
@@ -94,8 +94,8 @@ void loop() {
       for (float ph = 0.0f; ph < 6.28318530718f; ph += 0.01f) {
         float pos_m0 = 2.0f * cos(ph);
         float pos_m1 = 2.0f * sin(ph);
-        odrive.SetPosition(0, pos_m0);
-        odrive.SetPosition(1, pos_m1);
+        odrive.setPosition(0, pos_m0);
+        odrive.setPosition(1, pos_m1);
         delay(5);
       }
     }
@@ -110,9 +110,9 @@ void loop() {
     if (c == 'p') {
       static const unsigned long duration = 10000;
       unsigned long start = millis();
-      while(millis() - start < duration) {
+      while (millis() - start < duration) {
         for (int motor = 0; motor < 2; ++motor) {
-          Serial << odrive.GetPosition(motor) << '\t';
+          Serial << odrive.getPosition(motor) << '\t';
         }
         Serial << '\n';
       }
