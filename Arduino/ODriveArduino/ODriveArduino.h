@@ -7,9 +7,9 @@
 
 class ODriveArduino {
 private:
-    String readString();
-
     Stream& serial_;
+
+    String readString();
 
 public:
     /**
@@ -19,36 +19,34 @@ public:
      */
     ODriveArduino(Stream& serial);
 
-    //TODO: comprendre comment marche velocity_feedforward
-    //TODO: comprendre comment marche current_feedforward
     /**
-     * @brief Set the Position of a motor
-     *
-     * @param[in] motor_number The motor to set the position of
-     * @param[in] position The position to set the motor to in tour number
-     * @param[in] velocity_feedforward
-     * @param[in] current_feedforward
+     * @brief Set the Position of a motor with a given velocity and torque
+     * Note that if you don’t know what feed-forward is or what it’s used for, simply omit it.
+     * This command updates the watchdog timer for the motor.
+     * @param[in] motor_number is the motor number, 0 or 1
+     * @param[in] position is the desired position, in [turns].
+     * @param[in] velocity_feedforward is the velocity limit, in [turns/s] (optional)
+     * @param[in] torque_feedforward is the torque limit, in [Nm] (optional)
      */
-    void setPosition(int motor_number, float position, float velocity_feedforward = 0.0f, float current_feedforward = 0.0f);
+    void setPosition(int motor_number, float position, float velocity_feedforward = 0.0f, float torque_feedforward = 0.0f);
 
-    //TODO: comprendre comment marche current_feedforward
     /**
      * @brief Set the Velocity of a motor
-     *
-     * @param[in] motor_number The motor to set the velocity of
-     * @param[in] velocity The velocity to set the motor to
-     * @param[in] current_feedforward
+     * Note that if you don’t know what feed-forward is or what it’s used for, simply omit it.
+     * This command updates the watchdog timer for the motor.
+     * @param[in] motor_number is the motor number, 0 or 1.
+     * @param[in] velocity is the desired velocity in [turns/s].
+     * @param[in] torque_feedforward is the torque feed-forward term, in [Nm] (optional).
      */
-    void setVelocity(int motor_number, float velocity, float current_feedforward = 0.0f);
+    void setVelocity(int motor_number, float velocity, float torque_feedforward = 0.0f);
 
-    //TODO: comprendre comment marche la notion de current
     /**
-     * @brief Set the Current object
-     *
-     * @param motor_number The motor to set the current of
-     * @param current
+     * @brief Set the torque of a motor
+     * This command updates the watchdog timer for the motor.
+     * @param motor_number The motor to set the torque of
+     * @param torque
      */
-    void setCurrent(int motor_number, float current);
+    void setTorque(int motor_number, float torque);
 
     //TODO: comprendre comment marche la notion de trapezoidalMove
     void trapezoidalMove(int motor_number, float position);
