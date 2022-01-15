@@ -7,8 +7,16 @@
 
 class ODriveArduino {
 private:
+    /**
+     * @brief The serial port to use for communication with the ODrive.
+     *
+     */
     Stream& serial_;
 
+    /**
+     * @brief Read a response from the ODrive in serial.
+     * @return The response as a String.
+     */
     String readString();
 
 public:
@@ -18,6 +26,16 @@ public:
      * @param[in] serial The serial port to use to communicate with the ODrive
      */
     ODriveArduino(Stream& serial);
+
+    /**
+     * @brief Set the Position of a motor
+     * For general moving around of the axis, this is the recommended command.
+     * This command updates the watchdog timer for the motor.
+     * @param motor_number is the motor number, 0 or 1.
+     * @param position is the goal position, in [turns].
+     */
+    void setSimplePosition(int motor_number, float position);
+
 
     /**
      * @brief Set the Position of a motor with a given velocity and torque
@@ -43,14 +61,10 @@ public:
     /**
      * @brief Set the torque of a motor
      * This command updates the watchdog timer for the motor.
-     * @param motor_number The motor to set the torque of
-     * @param torque
+     * @param motor_number is the motor number, 0 or 1.
+     * @param torque is the desired torque in [Nm].
      */
     void setTorque(int motor_number, float torque);
-
-    //TODO: comprendre comment marche la notion de trapezoidalMove
-    void trapezoidalMove(int motor_number, float position);
-
 
     /**
      * @brief Get the Velocity of a motor
@@ -69,11 +83,30 @@ public:
     float getPosition(int motor_number);
 
 
-    // General params
+    /**
+     * @brief get the response value in float
+     *
+     * @return float The response value
+     */
     float readFloat();
+
+    /**
+     * @brief get the response value in int
+     *
+     * @return int The response value
+     */
     int32_t readInt();
 
-    // State helper
+    /**
+     * @brief
+     *
+     * @param[in] axis is the motor number, 0 or 1.
+     * @param[in] requested_state one of the states defined in ODriveEnums.h
+     * @param[in] wait_for_idle if true, wait for the state to be reached.
+     * @param[in] timeout is the timeout in milliseconds (optional) *default 10*.
+     * @return true the state was reached within the timeout.
+     * @return false the state was not reached within the timeout.
+     */
     bool run_state(int axis, int requested_state, bool wait_for_idle, float timeout = 10.0f);
 };
 

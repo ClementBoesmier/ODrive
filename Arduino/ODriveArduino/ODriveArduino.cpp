@@ -10,17 +10,17 @@ ODriveArduino::ODriveArduino(Stream& serial)
     : serial_(serial) {
 }
 
-void ODriveArduino::setPosition(int motor_number, float position, float velocity_feedforward, float current_feedforward) {
-    serial_ << "p " << motor_number << " " << position << " " << velocity_feedforward << " " << current_feedforward << "\n";
+void ODriveArduino::setPosition(int motor_number, float position, float velocity_feedforward, float torque_feedforward) {
+    serial_ << "p " << motor_number << " " << position << " " << velocity_feedforward << " " << torque_feedforward << "\n";
 }
 
 
-void ODriveArduino::setVelocity(int motor_number, float velocity, float current_feedforward) {
-    serial_ << "v " << motor_number << " " << velocity << " " << current_feedforward << "\n";
+void ODriveArduino::setVelocity(int motor_number, float velocity, float torque_feedforward) {
+    serial_ << "v " << motor_number << " " << velocity << " " << torque_feedforward << "\n";
 }
 
-void ODriveArduino::setCurrent(int motor_number, float current) {
-    serial_ << "c " << motor_number << " " << current << "\n";
+void ODriveArduino::setCurrent(int motor_number, float torque) {
+    serial_ << "c " << motor_number << " " << torque << "\n";
 }
 
 void ODriveArduino::trapezoidalMove(int motor_number, float position) {
