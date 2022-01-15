@@ -45,7 +45,7 @@ int32_t ODriveArduino::readInt() {
     return readString().toInt();
 }
 
-bool ODriveArduino::run_state(int axis, int requested_state, bool wait_for_idle, float timeout) {
+bool ODriveArduino::runState(int axis, int requested_state, bool wait_for_idle, float timeout) {
     int timeout_ctr = (int)(timeout * 10.0f);
     serial_ << "w axis" << axis << ".requested_state " << requested_state << '\n';
     if (wait_for_idle) {
