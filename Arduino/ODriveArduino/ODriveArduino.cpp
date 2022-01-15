@@ -19,11 +19,11 @@ void ODriveArduino::setVelocity(int motor_number, float velocity, float torque_f
     serial_ << "v " << motor_number << " " << velocity << " " << torque_feedforward << "\n";
 }
 
-void ODriveArduino::setCurrent(int motor_number, float torque) {
+void ODriveArduino::setTorque(int motor_number, float torque) {
     serial_ << "c " << motor_number << " " << torque << "\n";
 }
 
-void ODriveArduino::trapezoidalMove(int motor_number, float position) {
+void ODriveArduino::setSimplePosition(int motor_number, float position) {
     serial_ << "t " << motor_number << " " << position << "\n";
 }
 
